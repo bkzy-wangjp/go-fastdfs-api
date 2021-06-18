@@ -77,7 +77,7 @@ func (dfs *GoFastDfs) UploadFile(filepath string, params ...ParamKeyVal) (string
 }
 
 //数据接口转[]*FileInfoResult结构体
-func dataToStruct(data interface{}, result interface{}) error {
+func DataToStruct(data interface{}, result interface{}) error {
 	//var dirlist []*FileInfoResult
 	if msg, err := json.Marshal(data); err == nil {
 		if err := json.Unmarshal(msg, result); err == nil {
@@ -104,7 +104,7 @@ func (dfs *GoFastDfs) GetDirList(dir ...string) (*JsonResult, []*DirInfo, error)
 		return resp, nil, err
 	}
 	var res []*DirInfo
-	err = dataToStruct(resp.Data, &res)
+	err = DataToStruct(resp.Data, &res)
 	resp.Data = res
 	return resp, res, err
 }
@@ -125,7 +125,7 @@ func (dfs *GoFastDfs) GetFileInfo(path, md5 string) (*JsonResult, *FileInfo, err
 		return resp, nil, err
 	}
 	res := new(FileInfo)
-	err = dataToStruct(resp.Data, res)
+	err = DataToStruct(resp.Data, res)
 	resp.Data = *res
 	return resp, res, err
 }
@@ -158,7 +158,7 @@ func (dfs *GoFastDfs) GetStat() (*JsonResult, []*StatDateFileInfo, error) {
 		return resp, nil, err
 	}
 	var res []*StatDateFileInfo
-	err = dataToStruct(resp.Data, &res)
+	err = DataToStruct(resp.Data, &res)
 	resp.Data = res
 	return resp, res, err
 }
@@ -170,7 +170,7 @@ func (dfs *GoFastDfs) GetGloablConfig() (*JsonResult, *GloablConfig, error) {
 		return resp, nil, err
 	}
 	res := new(GloablConfig)
-	err = dataToStruct(resp.Data, res)
+	err = DataToStruct(resp.Data, res)
 	resp.Data = *res
 	return resp, res, err
 }
