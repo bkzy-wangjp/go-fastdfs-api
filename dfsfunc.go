@@ -3,8 +3,9 @@ package fastdfs
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
-	"github.com/astaxie/beego/httplib"
+	"github.com/beego/beego/v2/client/httplib"
 )
 
 //新建结构
@@ -173,4 +174,30 @@ func (dfs *GoFastDfs) GetGloablConfig() (*JsonResult, *GloablConfig, error) {
 	err = DataToStruct(resp.Data, res)
 	resp.Data = *res
 	return resp, res, err
+}
+
+//文件信息转换为文件上传结果
+func (dfs *GoFastDfs) FileInfo2FileResult(finfo *FileInfo, domain, group string) *FileResult {
+	fres := new(FileResult)
+	fres.Domain = domain
+	fres.Md5 = finfo.Md5
+	fres.ModTime = finfo.TimeStamp
+	paths := strings.Split(finfo.Path, "/")
+	if len(paths) > 0 {
+		paths[0] = group
+	}
+	paths = append(paths, finfo.ReName)
+	fres.Path = "/"
+	for i, s := range paths {
+		if i < len(paths)-1 {
+			fres.Path = fres.Path + s + "/"
+		} else {
+			fres.Path = fres.Path + s
+		}
+	}
+	fres.Scene = finfo.Scene
+	fres.Size = finfo.Size
+	fres.Url = domain + fres.Path
+
+	return fres
 }
